@@ -101,8 +101,8 @@ invoice_join as (
         invoice_lines.index,
         invoices.transaction_date as transaction_date,
         case when invoices.total_amount != 0
-            then invoice_lines.amount
-            else invoices.total_amount
+            then invoice_lines.amount::varchar
+            else invoices.total_amount::varchar
                 end as amount,
 
         {% if var('using_invoice_bundle', True) %}

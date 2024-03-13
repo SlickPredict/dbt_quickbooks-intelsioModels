@@ -91,13 +91,13 @@ models:
       int_quickbooks__vendor_credit_transactions. Additionally, while some transactions included in the previously mentioned transaction tables 
       contain non-expense transactions an inner join on accounts with the sub_type equal to Expense is applied.
 
-  - name: int_quickbooks__general_ledger_balances
+  - name: int_quickbooks__general_ledger_balances_cv
     description: >
       Table that aggregates quickbooks__general_ledger account level transactions per period into a period_beginning_balance, period_ending_balance, and period_net_change 
       for each period through the use of the int_quickbooks__general_ledger_date_spine model. Further, period balances are only applied to balance
       sheet accounts while income statement accounts do not have a persisting balance rather a period net change. Please note, a period equates to one month. 
 
-  - name: int_quickbooks__general_ledger_date_spine
+  - name: int_quickbooks__general_ledger_date_spine_cv
     description: >
       Table that creates a date spine by month with the first date being the minimum transaction date from the quickbooks__general_ledger
       model and the last date being one month after the last transaction date from the quickbooks__general_ledger model.
@@ -112,7 +112,7 @@ models:
       int_quickbooks__deposit_transactions. Additionally, while some transactions included in the previously mentioned transaction tables 
       contain non-income transactions an inner join on accounts with the sub_type equal to Income is applied.
 
-  - name: int_quickbooks__retained_earnings
+  - name: int_quickbooks__retained_earnings_cv
     description: >
       Table that creates an adjusting entry for retained earnings each month. The retained earnings account is created as account_id 9999 and is listed as an Equity class. 
       This table generates the retained earnings period beginning balance, ending balance, and net change by adding the period revenues and subtracting by the period 
@@ -397,7 +397,7 @@ models:
       - name: account_ordinal
         description: "{{ doc('account_ordinal') }}"
 
-  - name: quickbooks__profit_and_loss
+  - name: quickbooks__profit_and_loss_cv
     description: "{{ doc('profit_and_loss_table') }}"
     tests:
       - dbt_utils.unique_combination_of_columns:

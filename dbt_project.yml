@@ -1,5 +1,6 @@
 config-version: 2
 name: 'quickbooks'
+profile: 'quickbooks'
 
 version: '0.12.2'
 

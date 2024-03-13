@@ -1,13 +1,13 @@
 with general_ledger_balances as (
 
     select *
-    from {{ ref('int_quickbooks__general_ledger_balances') }}
+    from {{ ref('int_quickbooks__general_ledger_balances_cv') }}
 ),
 
 retained_earnings as (
 
     select *
-    from {{ ref('int_quickbooks__retained_earnings') }}
+    from {{ ref('int_quickbooks__retained_earnings_cv') }}
 ),
 
 {% if var('financial_statement_ordinal') %}

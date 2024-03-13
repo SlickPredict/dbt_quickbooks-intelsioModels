@@ -7,7 +7,7 @@ with general_ledger as (
 gl_accounting_periods as (
 
     select *
-    from {{ ref('int_quickbooks__general_ledger_date_spine') }}
+    from {{ ref('int_quickbooks__general_ledger_date_spine_cv') }}
 ),
 
 gl_period_balance as (
@@ -25,12 +25,14 @@ gl_period_balance as (
         financial_statement_helper,
         account_class,
         class_id,
+        customer_id,
+        vendor_id,
         cast({{ dbt.date_trunc("year", "transaction_date") }} as date) as date_year,
         cast({{ dbt.date_trunc("month", "transaction_date") }} as date) as date_month,
         sum(adjusted_amount) as period_balance
     from general_ledger
 
-    {{ dbt_utils.group_by(14) }}
+    {{ dbt_utils.group_by(16) }}
 ),
 
 gl_cumulative_balance as (
@@ -38,8 +40,8 @@ gl_cumulative_balance as (
     select
         *,
         case when financial_statement_helper = 'balance_sheet'
-            then sum(period_balance) over (partition by account_id, class_id, source_relation 
-            order by source_relation, date_month, account_id, class_id rows unbounded preceding) 
+            then sum(period_balance) over (partition by account_id, class_id, customer_id, vendor_id,source_relation 
+            order by source_relation, date_month, account_id, class_id, customer_id, vendor_id rows unbounded preceding) 
             else 0
                 end as cumulative_balance
     from gl_period_balance
@@ -60,6 +62,8 @@ gl_beginning_balance as (
         financial_statement_helper,
         account_class,
         class_id,
+        customer_id,
+        vendor_id,        
         date_year,
         date_month, 
         period_balance as period_net_change,
@@ -85,6 +89,8 @@ gl_patch as (
         coalesce(gl_beginning_balance.account_sub_type, gl_accounting_periods.account_sub_type) as account_sub_type,
         coalesce(gl_beginning_balance.account_class, gl_accounting_periods.account_class) as account_class,
         coalesce(gl_beginning_balance.class_id, gl_accounting_periods.class_id) as class_id,
+        coalesce(gl_beginning_balance.customer_id, gl_accounting_periods.customer_id) as customer_id,
+        coalesce(gl_beginning_balance.vendor_id, gl_accounting_periods.vendor_id) as vendor_id,
         coalesce(gl_beginning_balance.financial_statement_helper, gl_accounting_periods.financial_statement_helper) as financial_statement_helper,
         coalesce(gl_beginning_balance.date_year, gl_accounting_periods.date_year) as date_year,
         gl_accounting_periods.period_first_day,
@@ -109,6 +115,8 @@ gl_patch as (
             and gl_beginning_balance.date_month = gl_accounting_periods.period_first_day
             and gl_beginning_balance.date_year = gl_accounting_periods.date_year
             and coalesce(gl_beginning_balance.class_id, '0') = coalesce(gl_accounting_periods.class_id, '0')
+            and coalesce(gl_beginning_balance.customer_id, '0') = coalesce(gl_accounting_periods.customer_id, '0')
+            and coalesce(gl_beginning_balance.vendor_id, '0') = coalesce(gl_accounting_periods.vendor_id, '0')
 ),
 
 gl_value_partition as (
@@ -118,7 +126,7 @@ gl_value_partition as (
         sum(case when period_ending_balance_starter is null 
             then 0 
             else 1 
-                end) over (order by source_relation, account_id, class_id, period_last_day rows unbounded preceding) as gl_partition
+                end) over (order by source_relation, account_id, class_id, customer_id, vendor_id, period_last_day rows unbounded preceding) as gl_partition
     from gl_patch
 ),
  
@@ -136,6 +144,8 @@ final as (
         account_sub_type,
         account_class,
         class_id,
+        customer_id, 
+        vendor_id,
         financial_statement_helper,
         date_year,
         period_first_day,
