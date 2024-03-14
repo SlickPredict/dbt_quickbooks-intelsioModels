@@ -4,34 +4,34 @@ sources:
     - name: fivetran_quickbooks_fivetran_quickbooks
 
 models:
-    - name: quickbooks__general_ledger_by_period
-        columns:
-          - name: account_id
-          - name: source_relation
-          - name: account_number
-          - name: account_name
-          - name: is_sub_account
-          - name: parent_account_number
-          - name: parent_account_name
-          - name: account_type
-          - name: account_sub_type
-          - name: account_class
-          - name: class_id
-          - name: financial_statement_helper
-            description: Helper field identifying whether the account impacts the balances sheet or income statement.
-          - name: date_year
-            description: Timestamp of the year.
-          - name: period_first_day
-            description: Timestamp of the first date of the month.
-          - name: period_last_day
-            description: Timestamp of the last date of the month.
-          - name: period_net_change
-            description: Account balance difference from the beginning and ending of the period.
-          - name: period_beginning_balance
-            description: Balance of the account as of the first date of the period. 
-          - name: period_ending_balance
-            description: Sum of all transaction line adjusted_balances of the account for the period.
-          - name: account_ordinal
+  - name: quickbooks__general_ledger_by_period
+    columns:
+      - name: account_id
+      - name: source_relation
+      - name: account_number
+      - name: account_name
+      - name: is_sub_account
+      - name: parent_account_number
+      - name: parent_account_name
+      - name: account_type
+      - name: account_sub_type
+      - name: account_class
+      - name: class_id
+      - name: financial_statement_helper
+        description: Helper field identifying whether the account impacts the balances sheet or income statement.
+      - name: date_year
+        description: Timestamp of the year.
+      - name: period_first_day
+        description: Timestamp of the first date of the month.
+      - name: period_last_day
+        description: Timestamp of the last date of the month.
+      - name: period_net_change
+        description: Account balance difference from the beginning and ending of the period.
+      - name: period_beginning_balance
+        description: Balance of the account as of the first date of the period. 
+      - name: period_ending_balance
+        description: Sum of all transaction line adjusted_balances of the account for the period.
+      - name: account_ordinal
   - name: int_quickbooks__general_ledger_balances_cv
     description: >
       Table that aggregates quickbooks__general_ledger account level transactions per period into a period_beginning_balance, period_ending_balance, and period_net_change 
