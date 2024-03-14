@@ -5,7 +5,6 @@ sources:
 
 models:
     - name: quickbooks__general_ledger_by_period
-        description: "{{ doc('general_ledger_by_period_table') }}"
         tests:
           - dbt_utils.unique_combination_of_columns:
               combination_of_columns:
@@ -15,27 +14,16 @@ models:
                 - period_first_day
         columns:
           - name: account_id
-            description: "{{ doc('account_id') }} with the period balance transactions."
           - name: source_relation
-            description: "{{ doc('source_relation') }}"
           - name: account_number
-            description: "{{ doc('account_number') }} with the account."
           - name: account_name
-            description: "{{ doc('account_name') }} with the period balance transactions."
           - name: is_sub_account
-            description: "{{ doc('is_sub_account') }}"
           - name: parent_account_number
-            description: "{{ doc('parent_account_number') }}"
           - name: parent_account_name
-            description: "{{ doc('parent_account_name') }}"
           - name: account_type
-            description: "{{ doc('account_type') }} with the period balance transactions."
           - name: account_sub_type
-            description: "{{ doc('account_sub_type') }} with the period balance transactions."
           - name: account_class
-            description: "{{ doc('account_class') }} with the period balance transactions."
           - name: class_id
-            description: "{{ doc('class_id') }} with the period balance transactions."
           - name: financial_statement_helper
             description: Helper field identifying whether the account impacts the balances sheet or income statement.
           - name: date_year
@@ -51,7 +39,6 @@ models:
           - name: period_ending_balance
             description: Sum of all transaction line adjusted_balances of the account for the period.
           - name: account_ordinal
-            description: "{{ doc('account_ordinal') }}"
   - name: int_quickbooks__general_ledger_balances_cv
     description: >
       Table that aggregates quickbooks__general_ledger account level transactions per period into a period_beginning_balance, period_ending_balance, and period_net_change 
@@ -68,7 +55,7 @@ models:
       expenses. This total is set as the period ending balance. From the period ending balance the net change and beginning balances are calculated. This is table
       is then unioned with in_quickbooks__general_ledger_balances.      
   - name: quickbooks__profit_and_loss_cv
-    description: "{{ doc('profit_and_loss_table') }}"
+    description: Profit and loss table that includes customer and vendor.
     tests:
       - dbt_utils.unique_combination_of_columns:
           combination_of_columns:
@@ -78,30 +65,17 @@ models:
             - calendar_date 
     columns:
       - name: account_id
-        description: "{{ doc('account_id') }} with the record."
       - name: class_id
-        description: "{{ doc('class_id') }} with the record."
       - name: source_relation
-        description: "{{ doc('source_relation') }}"
       - name: calendar_date
-        description: "{{ doc('calendar_date') }}"
       - name: account_class
-        description: "{{ doc('account_class') }} with the profit and loss line."
       - name: is_sub_account
-        description: "{{ doc('is_sub_account') }}"
       - name: parent_account_number
-        description: "{{ doc('parent_account_number') }}"
       - name: parent_account_name
-        description: "{{ doc('parent_account_name') }}"
       - name: account_type
-        description: "{{ doc('account_type') }} with the profit and loss line."
       - name: account_sub_type
-        description: "{{ doc('account_sub_type') }} with the profit and loss line."
       - name: account_number
-        description: "{{ doc('account_number') }}"
       - name: account_name
-        description: "{{ doc('account_name') }} with the profit and loss line."
       - name: amount
         description: The total period net change for the period.
       - name: account_ordinal
-        description: "{{ doc('account_ordinal') }}"
