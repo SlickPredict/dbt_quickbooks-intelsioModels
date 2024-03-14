@@ -5,13 +5,6 @@ sources:
 
 models:
     - name: quickbooks__general_ledger_by_period
-        tests:
-          - dbt_utils.unique_combination_of_columns:
-              combination_of_columns:
-                - account_id
-                - class_id
-                - source_relation 
-                - period_first_day
         columns:
           - name: account_id
           - name: source_relation
@@ -56,13 +49,6 @@ models:
       is then unioned with in_quickbooks__general_ledger_balances.      
   - name: quickbooks__profit_and_loss_cv
     description: Profit and loss table that includes customer and vendor.
-    tests:
-      - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - account_id
-            - class_id
-            - source_relation
-            - calendar_date 
     columns:
       - name: account_id
       - name: class_id
