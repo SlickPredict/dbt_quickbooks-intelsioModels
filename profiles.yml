@@ -1,4 +1,4 @@
-quickbooks:
+quickbooks_intelsioModels:
   target: dev
   outputs:
     dev:
