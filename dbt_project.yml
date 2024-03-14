@@ -1,6 +1,6 @@
 config-version: 2
-name: 'quickbooks'
-profile: 'quickbooks'
+name: 'quickbooks_intelsioModels'
+profile: 'quickbooks_intelsioModels'
 
 version: '0.12.2'
 
