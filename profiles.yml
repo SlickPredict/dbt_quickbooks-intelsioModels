@@ -1,7 +1,7 @@
 quickbooks:
-  target: dev
+  target: prod
   outputs:
-    dev:
+    prod:
       type: redshift
       host: "{{ env_var('DBT_ENV_SECRET_DBT_HOST') }}"
       user: "{{ env_var('DBT_ENV_SECRET_DBT_USER') }}"
@@ -9,4 +9,4 @@ quickbooks:
       dbname: "{{ env_var('DBT_ENV_SECRET_DBT_DB') }}"
       port: 5439
       schema: fivetran_quickbooks
-      threads: 8
+      threads: 4

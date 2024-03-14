@@ -1,4 +1,4 @@
 version: 2
     
 sources:
-  - name: fivetran_quickbooks_fivetran_quickbooks
+  - name: fivetran_quickbooks

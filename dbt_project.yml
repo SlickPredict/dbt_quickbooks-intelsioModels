@@ -18,6 +18,8 @@ models:
     intermediate:
       +materialized: ephemeral
 vars:
+  quickbooks_database: intrsdb01
+  quickbooks_schema: fivetran_quickbooks
   quickbooks:
     account: "{{ ref('stg_quickbooks__account') }}"
     address: "{{ ref('stg_quickbooks__address') }}"
