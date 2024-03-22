@@ -10,6 +10,8 @@ models:
   quickbooks:
     +materialized: table
     +schema: quickbooks
+    +grants:
+      select: ['intelsio_sql_client']
     double_entry_transactions:
       +schema: quickbooks_intermediate
       +materialized: table
