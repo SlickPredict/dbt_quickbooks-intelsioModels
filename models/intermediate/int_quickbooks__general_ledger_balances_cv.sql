@@ -31,7 +31,7 @@ gl_period_balance as (
         gl.financial_statement_helper,
         gl.account_class,
         gl.class_id,
-        coalesce(gl.customer_id, purchase_lines.customer_id) as customer_id,
+        coalesce(gl.customer_id, purchase_lines.account_expense_customer_id) as customer_id,
         gl.vendor_id,
         cast({{ dbt.date_trunc("year", "transaction_date") }} as date) as date_year,
         cast({{ dbt.date_trunc("month", "transaction_date") }} as date) as date_month,
