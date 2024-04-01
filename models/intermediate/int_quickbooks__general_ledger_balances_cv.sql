@@ -10,6 +10,12 @@ gl_accounting_periods as (
     from {{ ref('int_quickbooks__general_ledger_date_spine_cv') }}
 ),
 
+purchase_lines as (
+
+    select * 
+    from {{ ref('stg_quickbooks__purchase_line') }}
+),
+    
 gl_period_balance as (
 
     select
@@ -25,12 +31,15 @@ gl_period_balance as (
         financial_statement_helper,
         account_class,
         class_id,
-        customer_id,
+        coalesce(general_ledger.customer_id, purchase_lines.customer_id) as customer_id,
         vendor_id,
         cast({{ dbt.date_trunc("year", "transaction_date") }} as date) as date_year,
         cast({{ dbt.date_trunc("month", "transaction_date") }} as date) as date_month,
         sum(adjusted_amount) as period_balance
     from general_ledger
+
+    left join purchase_lines
+        on purchase_lines.purchase_id = general_ledger.transaction_id
 
     {{ dbt_utils.group_by(16) }}
 ),
