@@ -19,27 +19,27 @@ purchase_lines as (
 gl_period_balance as (
 
     select
-        account_id,
-        source_relation,
-        account_number,
-        account_name,
-        is_sub_account,
-        parent_account_number,
-        parent_account_name,
-        account_type,
-        account_sub_type,
-        financial_statement_helper,
-        account_class,
-        class_id,
-        coalesce(general_ledger.customer_id, purchase_lines.customer_id) as customer_id,
-        vendor_id,
+        gl.account_id,
+        gl.source_relation,
+        gl.account_number,
+        gl.account_name,
+        gl.is_sub_account,
+        gl.parent_account_number,
+        gl.parent_account_name,
+        gl.account_type,
+        gl.account_sub_type,
+        gl.financial_statement_helper,
+        gl.account_class,
+        gl.class_id,
+        coalesce(gl.customer_id, purchase_lines.customer_id) as customer_id,
+        gl.vendor_id,
         cast({{ dbt.date_trunc("year", "transaction_date") }} as date) as date_year,
         cast({{ dbt.date_trunc("month", "transaction_date") }} as date) as date_month,
-        sum(adjusted_amount) as period_balance
-    from general_ledger
+        sum(gl.adjusted_amount) as period_balance
+    from general_ledger as gl
 
     left join purchase_lines
-        on purchase_lines.purchase_id = general_ledger.transaction_id
+        on purchase_lines.purchase_id = gl.transaction_id
 
     {{ dbt_utils.group_by(16) }}
 ),
