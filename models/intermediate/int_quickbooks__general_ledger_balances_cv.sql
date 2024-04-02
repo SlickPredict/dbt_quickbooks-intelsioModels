@@ -41,6 +41,7 @@ gl_period_balance as (
     left join purchase_lines
         on purchase_lines.purchase_id = gl.transaction_id
         and purchase_lines.account_expense_account_id = gl.account_id
+        and 'purchase' = gl.transaction_source
 
     {{ dbt_utils.group_by(16) }}
 ),
