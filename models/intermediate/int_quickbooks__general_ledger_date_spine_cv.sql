@@ -96,6 +96,7 @@ final as (
     left join purchase_lines
         on purchase_lines.purchase_id = general_ledger.transaction_id
         and purchase_lines.account_expense_account_id = general_ledger.account_id    
+        and 'purchase' = general_ledger.transaction_source
 
     cross join date_spine
 )
