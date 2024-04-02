@@ -66,6 +66,11 @@ date_spine as (
     from spine
 ),
 
+purchase_lines as (
+    select * 
+    from {{ ref('stg_quickbooks__purchase_line') }}
+),    
+
 final as (
     select distinct
         general_ledger.account_id,
@@ -80,13 +85,17 @@ final as (
         general_ledger.account_class,
         general_ledger.financial_statement_helper,
         general_ledger.class_id,
-        general_ledger.customer_id,
+        coalesce(general_ledger.customer_id, purchase_lines.account_expense_customer_id) as customer_id,
         general_ledger.vendor_id,
         date_spine.date_year,
         date_spine.period_first_day,
         date_spine.period_last_day,
         date_spine.period_index
     from general_ledger
+
+    left join purchase_lines
+        on purchase_lines.purchase_id = general_ledger.transaction_id
+        and purchase_lines.account_expense_account_id = general_ledger.account_id    
 
     cross join date_spine
 )
