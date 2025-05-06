@@ -85,7 +85,9 @@ final as (
         general_ledger.account_class,
         general_ledger.financial_statement_helper,
         general_ledger.class_id,
-        coalesce(general_ledger.customer_id, purchase_lines.account_expense_customer_id) as customer_id,
+        -- coalesce(general_ledger.customer_id, purchase_lines.account_expense_customer_id) as customer_id,
+        case when coalesce(general_ledger.customer_id,'') != '' then general_ledger.customer_id
+            else coalesce(purchase_lines.account_expense_customer_id,'') end as customer_id,     
         general_ledger.vendor_id,
         date_spine.date_year,
         date_spine.period_first_day,
